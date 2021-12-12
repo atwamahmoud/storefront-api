@@ -1,4 +1,4 @@
-## Image Processing API
+## Storefront API
 
 > Part of Udacity's Full-Stack nanodegree
 
@@ -7,8 +7,7 @@
 1. To install required dependencies run `npm i` or `yarn`
 2. Create a new `.env` file and set variables written in `.env.template`
    1. `PORT` is the part number to be used by the server
-   2. `IMAGES_DIR` is the directory name to get images from, defaults to "images"
-   3. `CACHE_DIR` is the directory name to get cached images from, defaults to "cache"
+3. 
 
 ## Commands/Scripts
 
