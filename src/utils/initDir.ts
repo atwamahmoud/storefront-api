@@ -10,5 +10,6 @@ async function initDir(dir: string) {
 }
 
 export function initDirs(): Promise<void[]> {
-  return Promise.all([initDir(IMG_DIR), initDir(CACHE_DIR)]);
+  // return Promise.all([initDir(IMG_DIR), initDir(CACHE_DIR)]);
+  return Promise.all([]);
 }

@@ -4,21 +4,22 @@ import {colorValidatorMiddleware} from "../middlewares/colorValidator";
 import {dimensionValidatorMiddleware} from "../middlewares/dimensionsValidator";
 import {HttpCodes} from "../utils/constants";
 
-const placeholderRouter = Router();
+const productsRouter = Router();
 
-placeholderRouter.get("/", dimensionValidatorMiddleware, colorValidatorMiddleware, (req, res) => {
-  const {width, height, bgColor, textColor, text} = req.query as Record<string, string>;
-
-  res.header("Content-Type", "image/svg+xml");
-  res.status(HttpCodes.ok).end(
-    createSVGString({
-      width: parseInt(width),
-      height: parseInt(height),
-      bgColor,
-      text,
-      textColor,
-    }),
-  );
+productsRouter.get("/", (req, res) => {
+  res.status(HttpCodes.ok).send([]);
+});
+productsRouter.get("/:id", (req, res) => {
+  res.status(HttpCodes.ok).send({
+    id: req.params.id,
+  });
+});
+productsRouter.post("/", (req, res) => {
+  // eslint-disable-next-line no-magic-numbers
+  const ProductId = Math.random() * 100;
+  res.status(HttpCodes.created).send({
+    id: Math.round(ProductId),
+  });
 });
 
-export default placeholderRouter;
+export default productsRouter;

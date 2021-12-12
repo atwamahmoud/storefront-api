@@ -10,6 +10,7 @@ export enum HttpCodes {
   serverError = 500,
   notFound = 404,
   ok = 200,
+  created = 201,
 }
 
 export const IMG_DIR = process.env.IMAGES_DIR || "images";
@@ -18,3 +19,14 @@ export const CACHE_DIR = process.env.CACHE_DIR || "cache";
 export const CACHE_FILENAME_SLASH_ESCAPER = "{{slash}}";
 
 export const HTTP_ERROR_NAME = "HTTP_ERROR";
+
+export enum OrderStatus {
+  active = "ACTIVE",
+  complete = "COMPLETE",
+}
+export const DEFAULT_SALT_ROUNDS = 10;
+export const SALT_ROUNDS = parseInt(process.env.SALT_ROUNDS || "") || DEFAULT_SALT_ROUNDS;
+
+export const JSON_SPACE_NUM = 2;
+
+export const ENV_FILE = process.env.ENV === "test" ? ".env.test" : ".env";

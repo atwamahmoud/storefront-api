@@ -1,0 +1,19 @@
+{
+    "dev": {
+      "driver": "pg",
+      "host": "127.0.0.1",
+      "database": "storefront_api",
+      "user": "user",
+      "password": "password",
+      "port": 8000
+    },
+    "test": {
+      "driver": "pg",
+      "host": "127.0.0.1",
+      "database": "storefront_api_test",
+      "user": "test_user",
+      "password": "password",
+      "port": 8000
+    },
+    "sql-file" : true
+}

@@ -8,14 +8,17 @@
   "scripts": {
     "build": "npx tsc",
     "jasmine": "jasmine",
-    "db:up": "docker-compose --env-file .env up -d",
-    "db:down": "docker-compose --env-file .env down",
-    "dev": "npm run db:up && nodemon",
-    "test": "npm run build && npm run jasmine",
+    "db:run-server": "docker-compose --env-file .env up -d",
+    "db:close-server": "docker-compose --env-file .env down",
+    "dev": "npm run db:run-server && nodemon",
+    "test": "bash ./test.sh",
     "lint": "eslint . --ext ts",
     "lint:fix": "eslint . --fix",
     "prettier": "prettier . --write",
-    "start": "npm run db:up && node build/index"
+    "start": "npm run db:run-server && node build/index",
+    "db-migrate": "db-migrate",
+    "db:up": "db-migrate up",
+    "db:down": "db-migrate down"
   },
   "devDependencies": {
     "@types/cheerio": "^0.22.30",
@@ -23,6 +26,7 @@
     "@types/jasmine": "^3.10.2",
     "@types/node": "^16.11.10",
     "@types/node-fetch": "2",
+    "@types/pg": "^8.6.1",
     "@types/sharp": "^0.29.4",
     "@types/supertest": "^2.0.11",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
@@ -40,11 +44,16 @@
     "typescript": "^4.5.2"
   },
   "dependencies": {
+    "@types/bcrypt": "^5.0.0",
+    "bcrypt": "^5.0.1",
+    "db-migrate": "^0.11.13",
+    "db-migrate-pg": "^1.2.2",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "jasmine": "^3.10.0",
     "jasmine-spec-reporter": "^7.0.0",
     "node-fetch": "2",
+    "pg": "^8.7.1",
     "sharp": "^0.29.3",
     "supertest": "^6.1.6",
     "validate-color": "^2.2.1"
