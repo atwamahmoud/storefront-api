@@ -1,5 +1,5 @@
-import IOrder from "../../interfaces/Order";
-import IUser, {IUserWithReqID} from "../../interfaces/User";
+import IOrder, {IOrderWithReqID} from "../../interfaces/Order";
+import IUser from "../../interfaces/User";
 import OrdersStore from "../../models/order";
 import UsersStore from "../../models/user";
 import {OrderStatus} from "../../utils/constants";
@@ -8,17 +8,21 @@ const store = new OrdersStore();
 
 describe("Order Model", () => {
   let order: IOrder;
-  let user: IUserWithReqID;
+  let order_with_id: IOrderWithReqID;
+  let user: IUser;
   beforeAll(async () => {
     user = await new UsersStore().create({
-      lastName: "Last Name",
-      firstName: "First Name",
-      password: "password",
+      last_name: "Last Name",
+      first_name: "First Name",
+      password_hash: "password_hash",
+      id: "my_user",
     });
     order = {
       status: OrderStatus.active,
-      userId: user.id,
+      user_id: user.id,
     };
+    // Delete all pre existing orders if any!
+    await Promise.all((await store.index()).map(({id}) => store.delete(id)));
   });
   it("Should have an index method", () => {
     expect(store.index).toBeDefined();
@@ -34,21 +38,26 @@ describe("Order Model", () => {
   });
   it("Create method should add an order", async () => {
     const result = await store.create(order);
-    expect(result).toEqual({...order, id: 1});
+    expect(result.id).toBeDefined();
+    expect(typeof result.id).toBe("number");
+    expect(result.id).toBeGreaterThan(0);
+    order.id = result.id;
+    order_with_id = result;
+    expect(result).toEqual(jasmine.objectContaining({...order}));
   });
   it("Show method should get the order with specified id", async () => {
-    const result = await store.show(1);
-    expect(result).toEqual({...order, id: 1});
+    const result = await store.show(order_with_id.id);
+    expect(result).toEqual(jasmine.objectContaining({...order}));
   });
   it("index method should get all orders", async () => {
     const result = await store.index();
-    expect(result.length).toEqual(1);
-    expect(result).toEqual([{...order, id: 1}]);
+    expect(result.length).toEqual(order_with_id.id);
+    expect(result).toEqual([{...order_with_id}]);
   });
   it("delete method should delete order with specified id", async () => {
     await store.create(order);
-    await store.delete(1);
+    await store.delete(order_with_id.id);
     const result = await store.index();
-    expect(result).toEqual([{...order, id: 2}]);
+    expect(result).toEqual([{...order, id: order_with_id.id + 1}]);
   });
 });

@@ -32,7 +32,7 @@ resizeRouter.get("/", dimensionValidatorMiddleware, pathValidatorMiddleware, asy
   const filepath = getFilePath(filename || "", IMG_DIR);
   const fileCanBeAccessed = await validateFileCanBeAccessed(filepath);
   if (filename && !fileCanBeAccessed) {
-    return res.status(HttpCodes.notFound).end("Couldn't find such image!");
+    return res.status(HttpCodes.not_found).end("Couldn't find such image!");
   }
 
   const fileBuffer = await (filename ? fetchFileFromFS(filepath) : fetchFileFromHTTP(url));
@@ -49,7 +49,7 @@ resizeRouter.get("/", dimensionValidatorMiddleware, pathValidatorMiddleware, asy
     await writeFile(cacheFilePath, bufferToSend);
   } catch (error: unknown) {
     const castedError = error as Error;
-    res.status(HttpCodes.serverError).end(castedError.message);
+    res.status(HttpCodes.server_error).end(castedError.message);
     return;
   }
 });

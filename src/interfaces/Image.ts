@@ -1,7 +1,7 @@
 export interface IImageData {
   width: number;
   height: number;
-  bgColor?: string;
-  textColor?: string;
+  bg_color?: string;
+  text_color?: string;
   text?: string;
 }

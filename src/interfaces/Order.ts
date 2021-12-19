@@ -1,14 +1,18 @@
 import {OrderStatus} from "../utils/constants";
+import IProduct from "./Product";
 
 export default interface IOrder {
   id?: number;
-  userId: number;
+  user_id: string;
   status: OrderStatus;
 }
+export interface IOrderWithReqID extends IOrder {
+  id: number;
+}
 
-export interface IOrderWithProducts extends IOrder {
+export interface IOrderWithProducts extends IOrderWithReqID {
   products: {
-    id: number;
+    id: number; // Makes id in `IProduct` required
     qty: number;
   }[];
 }

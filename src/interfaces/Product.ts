@@ -4,3 +4,7 @@ export default interface IProduct {
   price: number;
   category?: string;
 }
+
+export interface IProductWithReqID extends IProduct {
+  id: number;
+}

@@ -2,15 +2,15 @@ import {Request, Response, NextFunction} from "express";
 import {HttpCodes} from "../utils/constants";
 import {HTTPError} from "../utils/HTTPError";
 
-export function errorWrapper(req: Request, res: Response, next: NextFunction, func: () => void): void {
+export function error_wrapper(req: Request, res: Response, next: NextFunction, func: () => void): void {
   try {
     func();
     next();
   } catch (error: unknown) {
-    const castedError = error as HTTPError;
+    const casted_error = error as HTTPError;
     res
-      .status(castedError.errorCode || HttpCodes.serverError)
-      .end(castedError.message || "An unknown error have occured!");
+      .status(casted_error.errorCode || HttpCodes.server_error)
+      .end(casted_error.message || "An unknown error have occured!");
     return;
   }
 }

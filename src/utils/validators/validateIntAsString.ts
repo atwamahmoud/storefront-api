@@ -1,12 +1,11 @@
 import {BadRequestError} from "../badRequestError";
+import {DIGITS_ONLY_REGEX} from "../constants";
 
-export function validateIntAsString(int?: string, name = "int"): void {
-  const regex = /[^0-9]/g;
+export function validate_int_as_string(int?: string, name = "int"): void {
   if (typeof int === "undefined") {
     throw new BadRequestError(`Invalid ${name}, expected an int, found undefined`);
   }
-  const matches = int.match(regex);
-  if (matches || int.length === 0) {
+  if (!DIGITS_ONLY_REGEX.test(int)) {
     throw new BadRequestError(`Invalid ${name}, ${name} must be an int!`);
   }
 }

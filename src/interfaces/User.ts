@@ -1,11 +1,6 @@
 export default interface IUser {
-  id?: number;
-  firstName: string;
-  lastName: string;
+  id: string;
+  first_name: string;
+  last_name: string;
+  password_hash: string;
 }
-
-export interface IUserWithPassword extends IUser {
-  password: string;
-}
-
-export type IUserWithReqID = Omit<IUserWithPassword, "id"> & {id: number};

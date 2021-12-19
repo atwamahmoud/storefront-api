@@ -1,11 +1,11 @@
 import {Request, Response, NextFunction} from "express";
-import {validateIntAsString} from "../utils/validators";
-import {errorWrapper} from "./errorHandler";
+import {validate_int_as_string} from "../utils/validators";
+import {error_wrapper} from "./errorHandler";
 
 export function dimensionValidatorMiddleware(req: Request, res: Response, next: NextFunction): void {
-  errorWrapper(req, res, next, () => {
+  error_wrapper(req, res, next, () => {
     const {width, height} = req.query as Record<string, string>;
-    validateIntAsString(width, "width");
-    validateIntAsString(height, "height");
+    validate_int_as_string(width, "width");
+    validate_int_as_string(height, "height");
   });
 }

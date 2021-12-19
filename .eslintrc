@@ -26,7 +26,7 @@
       "error",
       {
         "selector": "default",
-        "format": ["camelCase"],
+        "format": ["snake_case"],
         "leadingUnderscore": "forbid",
         "trailingUnderscore": "forbid"
       },
@@ -34,7 +34,7 @@
       //Enforce camelCase for variables &  forbid Underscores & beginning & end
       {
         "selector": "variable",
-        "format": ["camelCase", "UPPER_CASE", "PascalCase"],
+        "format": ["snake_case", "UPPER_CASE", "PascalCase"],
         "leadingUnderscore": "forbid",
         "trailingUnderscore": "forbid"
       },
@@ -55,7 +55,11 @@
       //Enforce Interfaces to start with "I" letter
       {
         "selector": "interface",
-        "format": ["PascalCase"]
+        "format": ["PascalCase"],
+        "custom": {
+          "regex": "^I[A-Z]",
+          "match": true
+        }
       }
     ],
 

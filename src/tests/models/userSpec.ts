@@ -1,15 +1,15 @@
-import {IUserWithPassword} from "../../interfaces/User";
+import IUser from "../../interfaces/User";
 import UsersStore from "../../models/user";
 
 const store = new UsersStore();
 
 describe("User Model", () => {
-  const user: IUserWithPassword = {
-    firstName: "First Name",
-    lastName: "Last Name",
-    password: "test_password",
+  const user: IUser = {
+    first_name: "First Name",
+    last_name: "Last Name",
+    password_hash: "test_password",
+    id: "user_model_id",
   };
-  let id: number;
   it("Should have an index method", () => {
     expect(store.index).toBeDefined();
   });
@@ -24,39 +24,31 @@ describe("User Model", () => {
   });
   it("Create method should add a user", async () => {
     const result = await store.create(user);
-    expect(result.firstName).toEqual(user.firstName);
-    expect(result.lastName).toEqual(user.lastName);
-    expect(result.id).toBeTruthy();
-    user.id = result.id;
-    id = result.id;
-  });
-  it("Show method should get the user with specified id", async () => {
-    const result = await store.show(id);
-    expect(result.firstName).toEqual(user.firstName);
-    expect(result.lastName).toEqual(user.lastName);
+    expect(result.first_name).toEqual(user.first_name);
+    expect(result.last_name).toEqual(user.last_name);
+    expect(result.password_hash).toEqual(user.password_hash);
     expect(result.id).toEqual(user.id);
   });
-  it("Create method should hash the user password", async () => {
-    const result = await store.show(id);
-    expect(result.password).not.toEqual(user.password);
-    expect(result.password).not.toBeUndefined();
-    expect(result.password).toBeTruthy();
+  it("Show method should get the user with specified id", async () => {
+    const result = await store.show(user.id);
+    expect(result?.first_name).toEqual(user.first_name);
+    expect(result?.last_name).toEqual(user.last_name);
+    expect(result?.password_hash).toEqual(user.password_hash);
+    expect(result?.id).toEqual(user.id);
   });
   it("index method should get all users", async () => {
     const result = await store.index();
-    expect(result.length).toEqual(id);
+    expect(result.length).toBeGreaterThanOrEqual(1);
   });
   it("delete method should delete user with specified id", async () => {
-    await store.create(user);
-    await store.delete(id);
+    const id = "my_other_id";
+    await store.create({...user, id: id});
+    await store.delete(user.id);
     const result = await store.index();
-    expect(result.length).toEqual(id);
-    expect(result[id - 1]).toEqual(
-      jasmine.objectContaining({
-        firstName: user.firstName,
-        lastName: user.lastName,
-      }),
-    );
-    expect(result[id - 1].id).not.toEqual(id);
+    const last_inserted = result.pop();
+    expect(last_inserted).toEqual({
+      ...user,
+      id,
+    });
   });
 });

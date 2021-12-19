@@ -6,9 +6,10 @@ export const BAD_REQUEST = "BAD_REQUEST";
 export const DEFAULT_BAD_REQUEST_ERROR_MSG = "Invalid request parameters, please check the docs.";
 
 export enum HttpCodes {
-  badRequest = 400,
-  serverError = 500,
-  notFound = 404,
+  bad_request = 400,
+  server_error = 500,
+  not_found = 404,
+  unauthorized = 401,
   ok = 200,
   created = 201,
 }
@@ -30,3 +31,5 @@ export const SALT_ROUNDS = parseInt(process.env.SALT_ROUNDS || "") || DEFAULT_SA
 export const JSON_SPACE_NUM = 2;
 
 export const ENV_FILE = process.env.ENV === "test" ? ".env.test" : ".env";
+
+export const DIGITS_ONLY_REGEX = /^\d+$/;

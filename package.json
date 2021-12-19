@@ -10,15 +10,17 @@
     "jasmine": "jasmine",
     "db:run-server": "docker-compose --env-file .env up -d",
     "db:close-server": "docker-compose --env-file .env down",
-    "dev": "npm run db:run-server && nodemon",
+    "dev": "npm run db:run-server && nodemon -L",
     "test": "bash ./test.sh",
     "lint": "eslint . --ext ts",
     "lint:fix": "eslint . --fix",
     "prettier": "prettier . --write",
-    "start": "npm run db:run-server && node build/index",
+    "start": "npm run db:run-server && npm run db:up && node build/index",
     "db-migrate": "db-migrate",
     "db:up": "db-migrate up",
-    "db:down": "db-migrate down"
+    "db:down": "db-migrate down",
+    "db:reset": "db-migrate reset",
+    "db:drop": "db-migrate db:drop storefront_api"
   },
   "devDependencies": {
     "@types/cheerio": "^0.22.30",
@@ -45,6 +47,8 @@
   },
   "dependencies": {
     "@types/bcrypt": "^5.0.0",
+    "@types/dotenv": "^8.2.0",
+    "@types/jsonwebtoken": "^8.5.6",
     "bcrypt": "^5.0.1",
     "db-migrate": "^0.11.13",
     "db-migrate-pg": "^1.2.2",
@@ -52,6 +56,7 @@
     "express": "^4.17.1",
     "jasmine": "^3.10.0",
     "jasmine-spec-reporter": "^7.0.0",
+    "jsonwebtoken": "^8.5.1",
     "node-fetch": "2",
     "pg": "^8.7.1",
     "sharp": "^0.29.3",

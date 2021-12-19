@@ -4,7 +4,7 @@ import {ENV_FILE} from "../utils/constants";
 dotenv.config({
   path: ENV_FILE,
 });
-const dbClient = new Pool({
+const db_client = new Pool({
   host: process.env.POSTGRES_HOST,
   port: parseInt(process.env.POSTGRES_PORT || ""),
   database: process.env.POSTGRES_DB,
@@ -12,4 +12,4 @@ const dbClient = new Pool({
   password: process.env.POSTGRES_PASSWORD,
 });
 
-export default dbClient;
+export default db_client;

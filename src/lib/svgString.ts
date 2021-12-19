@@ -14,8 +14,8 @@ import {DEFAULT_SVG_BG_COLOR, DEFAULT_SVG_TEXT_COLOR} from "../utils/constants";
 export function createSVGString(imageData: IImageData): string {
   const {width, height, bgColor, textColor, text} = {
     ...imageData,
-    bgColor: imageData.bgColor || DEFAULT_SVG_BG_COLOR,
-    textColor: imageData.textColor || DEFAULT_SVG_TEXT_COLOR,
+    bgColor: imageData.bg_color || DEFAULT_SVG_BG_COLOR,
+    textColor: imageData.text_color || DEFAULT_SVG_TEXT_COLOR,
     text: imageData.text || `${imageData.width}x${imageData.height}`,
   };
   return `<?xml version="1.0" standalone="no"?>
