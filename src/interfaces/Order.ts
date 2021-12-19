@@ -1,5 +1,4 @@
 import {OrderStatus} from "../utils/constants";
-import IProduct from "./Product";
 
 export default interface IOrder {
   id?: number;

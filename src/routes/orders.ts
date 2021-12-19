@@ -13,11 +13,77 @@ const orders_store = new OrdersStore();
 const order_product_store = new ProductOrderStore();
 const orders_router = Router();
 
+/**
+ * @api {get} /orders/user/:id Request orders of user with id = id
+ * @apiName GetUserOrders
+ * @apiGroup Orders
+ *
+ * @apiUse AuthorizationHeader
+ * @apiUse UnauthorizedError
+ *
+ * @apiParam {String} id  User Id
+ *
+ * @apiSuccess {Object[]} orders.
+ * @apiSuccess {Number} orders.id id of order.
+ * @apiSuccess {String} orders.status status of order
+ * @apiSuccess {String} orders.user_id user_id of order
+ * @apiSuccess {Object[]} orders.products products contained within this order
+ * @apiSuccess {Number} orders.products.id id of product
+ * @apiSuccess {Number} orders.products.qty qty of product
+ *
+ * @apiSuccessExample {json} Success-Response:
+ *  [
+ *    {
+ *      id: 1,
+ *      status: "ACTIVE",
+ *      user_id: "m_atwa",
+ *      products: [
+ *        id: 3,
+ *        qty: 4,
+ *      ],
+ *    }
+ *  ]
+ *
+ * @apiExample {js} Example usage:
+ *  fetch("orders/user/m_atwa")
+ */
 orders_router.get("/user/:id", string_id_validation_middleware, async (req, res) => {
   const orders = await OrdersService.products_with_user_id(req.params.id);
   res.status(HttpCodes.ok).send(orders);
 });
 
+/**
+ * @api {get} /orders/:id Request order with id = id
+ * @apiName GetOrderDetails
+ * @apiGroup Orders
+ *
+ * @apiUse AuthorizationHeader
+ * @apiUse UnauthorizedError
+ *
+ * @apiParam {String} id  Order Id
+ *
+ * @apiSuccess {Object} order.
+ * @apiSuccess {Number} order.id id of order.
+ * @apiSuccess {String} order.status status of order
+ * @apiSuccess {String} order.user_id user_id of order
+ * @apiSuccess {Object[]} order.products products contained within this order
+ * @apiSuccess {Number} order.products.id id of product
+ * @apiSuccess {Number} order.products.qty qty of product
+ *
+ * @apiSuccessExample {json} Success-Response:
+ *    {
+ *      id: 1,
+ *      status: "ACTIVE",
+ *      user_id: "m_atwa",
+ *      products: [
+ *        id: 3,
+ *        qty: 4,
+ *      ],
+ *    }
+ *
+ * @apiExample {js} Example usage:
+ *  fetch("order/1")
+ */
 orders_router.get("/:id", id_validation_middleware, async (req, res) => {
   const number_id = parseInt(req.params.id);
   const order = await OrdersService.products_with_order_id(number_id);
@@ -28,6 +94,43 @@ orders_router.get("/:id", id_validation_middleware, async (req, res) => {
   res.status(HttpCodes.ok).send(order);
 });
 
+/**
+ * @api {post} /orders Creates a new order for user
+ * @apiName CreateOrder
+ * @apiGroup Orders
+ *
+ * @apiUse AuthorizationHeader
+ * @apiUse UnauthorizedError
+ *
+ * @apiParam {Object} order.
+ * @apiParam {String="ACTIVE","COMPLETE"} [order.status="ACTIVE"] status of order
+ * @apiParam {Object[]} order.products products contained within this order
+ * @apiParam {Number} order.products.id id of product
+ * @apiParam {Number} order.products.qty qty of product
+ *
+ * @apiParamExample {json} Success-Response:
+ *    {
+ *      status: "ACTIVE",
+ *      products: [
+ *        id: 3,
+ *        qty: 4,
+ *      ],
+ *    }
+ *
+ * @apiExample {js} Example usage:
+ *  fetch("order", {
+ *    method: "POST",
+ *    body: JSON.stringify({
+ *      order: {
+ *        status: "ACTIVE",
+ *        products: [
+ *          id: 3,
+ *          qty: 4,
+ *        ],
+ *      }
+ *    })
+ *  })
+ */
 orders_router.post("/", auth_middleware, order_validation_middleware, async (req, res) => {
   const {order} = req.body as {order: IOrderWithProducts};
   if (!res.locals.decoded_token) {

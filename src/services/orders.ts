@@ -1,5 +1,5 @@
 import db_client from "../database";
-import IOrder, {IOrderWithProducts, IOrderWithReqID} from "../interfaces/Order";
+import {IOrderWithProducts, IOrderWithReqID} from "../interfaces/Order";
 import IOrderProductRelation from "../interfaces/OrderProduct";
 
 export class OrdersService {

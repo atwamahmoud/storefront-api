@@ -20,6 +20,7 @@
     "db:up": "db-migrate up",
     "db:down": "db-migrate down",
     "db:reset": "db-migrate reset",
+    "apidoc": "apidoc-markdown -i src -o apidoc.md",
     "db:drop": "db-migrate db:drop storefront_api"
   },
   "devDependencies": {
@@ -33,6 +34,7 @@
     "@types/supertest": "^2.0.11",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "@typescript-eslint/parser": "^5.4.0",
+    "apidoc-markdown": "^7.0.1",
     "cheerio": "^1.0.0-rc.10",
     "eslint": "^8.3.0",
     "eslint-config-prettier": "^8.3.0",

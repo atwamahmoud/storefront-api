@@ -8,9 +8,6 @@ import {ENV_FILE} from "./utils/constants";
 dotenv.config({
   path: ENV_FILE,
 });
-import {initDirs} from "./utils/initDir";
-
-initDirs();
 
 export const app = express();
 app.use(express.json());
