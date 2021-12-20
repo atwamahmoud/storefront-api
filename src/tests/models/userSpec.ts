@@ -45,9 +45,11 @@ describe("User Model", () => {
     await store.create({...user, id: id});
     await store.delete(user.id);
     const result = await store.index();
+    expect(result.length).toBeGreaterThanOrEqual(1);
     const last_inserted = result.pop();
     expect(last_inserted).toEqual({
       ...user,
+      password_hash: last_inserted!.password_hash,
       id,
     });
   });

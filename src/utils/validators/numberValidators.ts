@@ -16,7 +16,16 @@ export function validate_number(num: number, name = "Number"): void {
     throw new BadRequestError(`Invalid ${name}, expected number!`);
   }
 }
-
+export function validate_more_than(num: number, more_than: number, name = "Number"): void {
+  if (num <= more_than) {
+    throw new BadRequestError(`Invalid ${name}, expected ${name} to be more than ${more_than}!`);
+  }
+}
+export function validate_less_than(num: number, less_than: number, name = "Number"): void {
+  if (num >= less_than) {
+    throw new BadRequestError(`Invalid ${name}, expected ${name} to be less than ${less_than}!`);
+  }
+}
 export function validate_positive(num: number, name = "Positive"): void {
   if (num < 0) {
     throw new BadRequestError(`Invalid ${name}, Expected positive number!`);

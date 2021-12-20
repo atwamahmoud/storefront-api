@@ -3,7 +3,7 @@ import {IOrderWithProducts} from "../interfaces/Order";
 import {auth_middleware} from "../middlewares/auth";
 import {id_validation_middleware} from "../middlewares/idValidator";
 import {order_validation_middleware} from "../middlewares/orderValidationMiddleware";
-import {string_id_validation_middleware} from "../middlewares/stringIdValidator";
+import {string_id_params_validation_middleware} from "../middlewares/stringIdValidator";
 import OrdersStore from "../models/order";
 import ProductOrderStore from "../models/orderProductRelation";
 import {OrdersService} from "../services/orders";
@@ -14,7 +14,7 @@ const order_product_store = new ProductOrderStore();
 const orders_router = Router();
 
 /**
- * @api {get} /orders/user/:id Request orders of user with id = id
+ * @api {get} /orders/user/:id Get user orders
  * @apiName GetUserOrders
  * @apiGroup Orders
  *
@@ -47,15 +47,22 @@ const orders_router = Router();
  * @apiExample {js} Example usage:
  *  fetch("orders/user/m_atwa")
  */
-orders_router.get("/user/:id", string_id_validation_middleware, async (req, res) => {
-  const orders = await OrdersService.products_with_user_id(req.params.id);
+orders_router.get("/user/:id", string_id_params_validation_middleware, auth_middleware, async (req, res) => {
+  const {id} = req.params;
+  if (!res.locals.decoded_token) {
+    throw new Error("Couldn't find decoded_token in res.locals!");
+  }
+  const {id: token_id} = res.locals.decoded_token;
+  if (id !== token_id) return res.status(HttpCodes.unauthorized).end();
+  const orders = await OrdersService.products_with_user_id(id);
   res.status(HttpCodes.ok).send(orders);
 });
 
 /**
- * @api {get} /orders/:id Request order with id = id
+ * @api {get} /orders/:id Get Order
  * @apiName GetOrderDetails
  * @apiGroup Orders
+ *
  *
  * @apiUse AuthorizationHeader
  * @apiUse UnauthorizedError
@@ -84,18 +91,24 @@ orders_router.get("/user/:id", string_id_validation_middleware, async (req, res)
  * @apiExample {js} Example usage:
  *  fetch("order/1")
  */
-orders_router.get("/:id", id_validation_middleware, async (req, res) => {
+orders_router.get("/:id", id_validation_middleware, auth_middleware, async (req, res) => {
   const number_id = parseInt(req.params.id);
   const order = await OrdersService.products_with_order_id(number_id);
-  if (!order) {
-    res.status(HttpCodes.not_found).end();
-    return;
+
+  if (!order) return res.status(HttpCodes.not_found).end();
+
+  if (!res.locals.decoded_token) {
+    throw new Error("Couldn't find decoded_token in res.locals!");
   }
+  const {id: token_id} = res.locals.decoded_token;
+  if (order?.user_id !== token_id)
+    return res.status(HttpCodes.unauthorized).send({"order?.user_id": order?.user_id, "token_id": token_id});
+
   res.status(HttpCodes.ok).send(order);
 });
 
 /**
- * @api {post} /orders Creates a new order for user
+ * @api {post} /orders Create Order
  * @apiName CreateOrder
  * @apiGroup Orders
  *

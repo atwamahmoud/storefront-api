@@ -1,5 +1,5 @@
 <a name="top"></a>
-# storefront-api project v1.0.0
+# Acme project v0.0.0
 
 REST Api
 
@@ -8,17 +8,17 @@ REST Api
 - [Authentication](#Authentication)
   - [Generate a JWT](#Generate-a-JWT)
 - [Orders](#Orders)
-  - [Create order](#Creates-a-new-order-for-user)
-  - [Get order](#Request-order-with-id-=-id)
-  - [Get user orders](#Request-orders-of-user-with-id-=-id)
+  - [Create Order](#Create-Order)
+  - [Get Order](#Get-Order)
+  - [Get user orders](#Get-user-orders)
 - [Products](#Products)
-  - [Create product](#Creates-a-new-product)
-  - [Get all products](#Request-all-available-products)
-  - [Get product](#Request-product-with-id-=-id)
+  - [Create product](#Create-product)
+  - [Get product](#Get-product)
+  - [Get products](#Get-products)
 - [Users](#Users)
-  - [Create user](#Creates-a-new-user)
-  - [Get all users](#Request-all-users)
-  - [Get user](#Request-user-with-id-=-id)
+  - [Create user](#Create-user)
+  - [Get user](#Get-user)
+  - [Request all users](#Request-all-users)
 
 ___
 
@@ -89,7 +89,7 @@ Invalid password, please check the docs!
 
 # <a name='Orders'></a> Orders
 
-## <a name='Creates-a-new-order-for-user'></a> Create order
+## <a name='Create-Order'></a> Create Order
 [Back to top](#top)
 
 ```
@@ -169,7 +169,7 @@ HTTP/1.1 400 Bad request
 Invalid auth token!
 ```
 
-## <a name='Request-order-with-id-=-id'></a> Get order
+## <a name='Get-Order'></a> Get Order
 [Back to top](#top)
 
 ```
@@ -251,7 +251,7 @@ HTTP/1.1 400 Bad request
 Invalid auth token!
 ```
 
-## <a name='Request-orders-of-user-with-id-=-id'></a> Get user orders
+## <a name='Get-user-orders'></a> Get user orders
 [Back to top](#top)
 
 ```
@@ -337,7 +337,7 @@ Invalid auth token!
 
 # <a name='Products'></a> Products
 
-## <a name='Creates-a-new-product'></a> Create Product
+## <a name='Create-product'></a> Create product
 [Back to top](#top)
 
 ```
@@ -437,45 +437,7 @@ HTTP/1.1 400 Bad request
 Invalid auth token!
 ```
 
-## <a name='Request-all-available-products'></a> Get all products
-[Back to top](#top)
-
-```
-GET /products/
-```
-
-### Examples
-Example usage:
-
-```js
-fetch("/products")
-```
-
-### Success response
-
-#### Success response - `Success 200`
-
-| Name     | Type       | Description                           |
-|----------|------------|---------------------------------------|
-| products. | `Object[]` |  |
-| products.id | `Number` | <p>id of product.</p> |
-| products.name | `String` | <p>name of product</p> |
-| products.category | `String|null` | <p>category of product</p> |
-| products.price | `Number` | <p>price of product</p> |
-
-### Success response example
-
-#### Success response example - `Success-Response:`
-
-```json
-[{
-  id: 1,
-  name: "Headphones",
-  price: 199.9,
-}]
-```
-
-## <a name='Request-product-with-id-=-id'></a> Get product
+## <a name='Get-product'></a> Get product
 [Back to top](#top)
 
 ```
@@ -519,10 +481,51 @@ fetch("/products/1")
 }
 ```
 
+## <a name='Get-products'></a> Get products
+[Back to top](#top)
+
+```
+GET /products/
+```
+
+### Examples
+Example usage:
+
+```js
+fetch("/products")
+```
+
+### Success response
+
+#### Success response - `Success 200`
+
+| Name     | Type       | Description                           |
+|----------|------------|---------------------------------------|
+| products. | `Object[]` |  |
+| products.id | `Number` | <p>id of product.</p> |
+| products.name | `String` | <p>name of product</p> |
+| products.category | `String|null` | <p>category of product</p> |
+| products.price | `Number` | <p>price of product</p> |
+
+### Success response example
+
+#### Success response example - `Success-Response:`
+
+```json
+[{
+  id: 1,
+  name: "Headphones",
+  price: 199.9,
+}]
+```
+
 # <a name='Users'></a> Users
 
-## <a name='Creates-a-new-user'></a> Create user
+## <a name='Create-user'></a> Create user
 [Back to top](#top)
+
+> Please note that returning the password_hash is meant for clarification for the reviewer it should never be sent to public
+
 
 ```
 POST /users
@@ -596,83 +599,17 @@ fetch("users", {
 }
 ```
 
-## <a name='Request-all-users'></a> Get all users
-[Back to top](#top)
-
-> Please note that returning the password_hash is meant for clarification for the reviewer it should never be sent to public
-
-```
-GET /users
-```
-
-### Headers - `Header`
-
-| Name    | Type      | Description                          |
-|---------|-----------|--------------------------------------|
-| authorization | `String` | <p>Users jwt obtained from /auth endpoint.</p> |
-
-### Header examples
-Header-Example:
-
-```json
-{
-  "Authorization": "Bearer {token}"
-}
-```
-
-### Examples
-Example usage:
-
-```js
-fetch("/users/m_atwa")
-```
-
-### Success response
-
-#### Success response - `Success 200`
-
-| Name     | Type       | Description                           |
-|----------|------------|---------------------------------------|
-| users | `Object[]` | <p>Array of users</p> |
-| users.id | `String` | <p>id of user.</p> |
-| users.first_name | `String` | <p>first name.</p> |
-| users.last_name | `String` | <p>last name</p> |
-| users.password_hash | `String` | <p>user's password hash</p> |
-
-### Success response example
-
-#### Success response example - `Success-Response:`
-
-```json
-[{
-  "id": "m_atwa",
-  "first_name": "Mahmoud",
-  "last_name": "Atwa",
-  "password_hash": "....",
-}]
-```
-
-### Error response
-
-#### Error response - `Error 4xx`
-
-| Name     | Type       | Description                           |
-|----------|------------|---------------------------------------|
-| Unauthorized |  | <p>The invalid or missing token.</p> |
-
-### Error response example
-
-#### Error response example - `UnauthorizedError-Reponse`
+#### Success response example - `Error-Response:`
 
 ```json
 HTTP/1.1 400 Bad request
-Invalid auth token!
+   {
+     error: "Duplicate User ID"
+   }
 ```
 
-## <a name='Request-user-with-id-=-id'></a> Get User
+## <a name='Get-user'></a> Get user
 [Back to top](#top)
-
-> Please note that returning the password_hash is meant for clarification for the reviewer it should never be sent to public
 
 ```
 GET /users/:id
@@ -729,6 +666,77 @@ fetch("/users/m_atwa")
   "last_name": "Atwa",
   "password_hash": "....",
 }
+```
+
+### Error response
+
+#### Error response - `Error 4xx`
+
+| Name     | Type       | Description                           |
+|----------|------------|---------------------------------------|
+| Unauthorized |  | <p>The invalid or missing token.</p> |
+
+### Error response example
+
+#### Error response example - `UnauthorizedError-Reponse`
+
+```json
+HTTP/1.1 400 Bad request
+Invalid auth token!
+```
+
+## <a name='Request-all-users'></a> Request all users
+[Back to top](#top)
+
+```
+GET /users
+```
+
+### Headers - `Header`
+
+| Name    | Type      | Description                          |
+|---------|-----------|--------------------------------------|
+| authorization | `String` | <p>Users jwt obtained from /auth endpoint.</p> |
+
+### Header examples
+Header-Example:
+
+```json
+{
+  "Authorization": "Bearer {token}"
+}
+```
+
+### Examples
+Example usage:
+
+```js
+fetch("/users/m_atwa")
+```
+
+### Success response
+
+#### Success response - `Success 200`
+
+| Name     | Type       | Description                           |
+|----------|------------|---------------------------------------|
+| users | `Object[]` | <p>Array of users</p> |
+| users.id | `String` | <p>id of user.</p> |
+| users.first_name | `String` | <p>first name.</p> |
+| users.last_name | `String` | <p>last name</p> |
+| users.password_hash | `String` | <p>user's password hash</p> |
+
+### Success response example
+
+#### Success response example - `Success-Response:`
+
+```json
+[{
+  "id": "m_atwa",
+  "first_name": "Mahmoud",
+  "last_name": "Atwa",
+  "password_hash": "....",
+}]
 ```
 
 ### Error response

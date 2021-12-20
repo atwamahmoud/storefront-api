@@ -1,9 +1,9 @@
 import dotenv from "dotenv";
 import express from "express";
-import auth_router from "./routes/auth";
-import orders_router from "./routes/orders";
-import products_router from "./routes/products";
-import users_router from "./routes/user";
+import auth_router from "./handlers/auth";
+import orders_router from "./handlers/orders";
+import products_router from "./handlers/products";
+import users_router from "./handlers/user";
 import {ENV_FILE} from "./utils/constants";
 dotenv.config({
   path: ENV_FILE,

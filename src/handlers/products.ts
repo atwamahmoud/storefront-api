@@ -9,7 +9,7 @@ const products_store = new ProductsStore();
 const products_router = Router();
 
 /**
- * @api {get} /products/ Request all available products
+ * @api {get} /products/ Get products
  * @apiName GetProducts
  * @apiGroup Products
  *
@@ -35,7 +35,7 @@ products_router.get("/", async (req, res) => {
 });
 
 /**
- * @api {get} /products/:id Request product with id = id
+ * @api {get} /products/:id Get product
  * @apiName GetProductDetails
  * @apiGroup Products
  *
@@ -68,7 +68,7 @@ products_router.get("/:id", id_validation_middleware, async (req, res) => {
 });
 
 /**
- * @api {post} /products Creates a new order for user
+ * @api {post} /products Create product
  * @apiName CreateProduct
  * @apiGroup Products
  *

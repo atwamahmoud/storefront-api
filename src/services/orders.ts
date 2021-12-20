@@ -26,7 +26,7 @@ export class OrdersService {
     try {
       const connection = await db_client.connect();
       const results = await connection.query<{order_id: number}>(
-        "SELECT order_id FROM orders INNER JOIN product_orders on orders.id = product_orders.order_id WHERE user_id = $1",
+        "SELECT order_id FROM orders INNER JOIN product_orders on orders.id = product_orders.order_id WHERE user_id = $1 AND orders.status = 'ACTIVE'",
         [user_id],
       );
       if (!results.rows.length) return [];

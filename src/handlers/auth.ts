@@ -1,9 +1,11 @@
-import {Router} from "express";
+import {Router, Request, Response, NextFunction} from "express";
 import UsersStore from "../models/user";
 import {HttpCodes} from "../utils/constants";
 import {compare_password} from "../utils/password";
 import jwt from "jsonwebtoken";
 import {get_private_key} from "../utils/getPrivateKey";
+import {error_wrapper} from "../middlewares/errorHandler";
+import {validate_string} from "../utils/validators";
 
 const users_store = new UsersStore();
 const auth_router = Router();
@@ -56,15 +58,15 @@ const auth_router = Router();
  *    })
  *  })
  */
-auth_router.post("/", async (req, res) => {
+auth_router.post("/", validation_middleware, async (req, res) => {
   const user = await users_store.show(req.body.id);
   const ERROR = {error: "Invalid username or password"};
   if (!user) {
-    return res.status(HttpCodes.unauthorized).end(ERROR);
+    return res.status(HttpCodes.unauthorized).send(ERROR);
   }
   const is_same_password = await compare_password(user?.password_hash, req.body.password);
   if (!is_same_password) {
-    return res.status(HttpCodes.unauthorized).end(ERROR);
+    return res.status(HttpCodes.unauthorized).send(ERROR);
   }
   jwt.sign(
     {
@@ -87,3 +89,10 @@ auth_router.post("/", async (req, res) => {
 });
 
 export default auth_router;
+
+function validation_middleware(req: Request, res: Response, next: NextFunction) {
+  error_wrapper(req, res, next, () => {
+    validate_string(req.body.id);
+    validate_string(req.body.password);
+  });
+}

@@ -2,9 +2,14 @@ import {Request, Response, NextFunction} from "express";
 import {HttpCodes} from "../utils/constants";
 import {HTTPError} from "../utils/HTTPError";
 
-export function error_wrapper(req: Request, res: Response, next: NextFunction, func: () => void): void {
+export async function error_wrapper(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+  func: () => void | Promise<void>,
+): Promise<void> {
   try {
-    func();
+    await func();
     next();
   } catch (error: unknown) {
     const casted_error = error as HTTPError;

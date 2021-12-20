@@ -12,9 +12,17 @@ export function auth_middleware(req: Request, res: Response, next: NextFunction)
     validate_string(auth_header, "Auth Header");
     const token = auth_header?.split(" ")[1];
     validate_string(auth_header, "Token");
-    verify(token || "", get_private_key(), (err, decoded) => {
-      if (err || !decoded) throw new HTTPError(HttpCodes.unauthorized, "Invalid auth token!");
-      res.locals.decoded_token = decoded;
+    return new Promise<void>((resolve) => {
+      verify(token || "", get_private_key(), (err, decoded) => {
+        try {
+          if (err || !decoded) throw new Error();
+          res.locals.decoded_token = decoded;
+        } catch {
+          throw new HTTPError(HttpCodes.unauthorized, "Invalid auth token!");
+        } finally {
+          resolve();
+        }
+      });
     });
   });
 }

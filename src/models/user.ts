@@ -6,7 +6,7 @@ export default class UsersStore extends AbstractModel<IUser> {
   async index(): Promise<IUser[]> {
     try {
       const connection = await this.get_connection();
-      const QUERY = "SELECT id, first_name, last_name FROM users";
+      const QUERY = "SELECT * FROM users";
       const results = await connection.query<IUser>(QUERY);
       connection.release();
       return results.rows;

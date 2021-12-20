@@ -8,6 +8,6 @@ export function product_validation_middleware(req: Request, res: Response, next:
     validate_string(product.name, "Product name");
     validate_number(product.price, "Product Price");
     validate_positive(product.price, "Product Price");
-    if (product.category) validate_string(product.name, "Product category");
+    if ("category" in product) validate_string(product.category, "Product category");
   });
 }

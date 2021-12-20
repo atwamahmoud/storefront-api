@@ -1,6 +1,6 @@
 import {Router} from "express";
 import {auth_middleware} from "../middlewares/auth";
-import {string_id_validation_middleware} from "../middlewares/stringIdValidator";
+import {string_id_params_validation_middleware} from "../middlewares/stringIdValidator";
 import {user_validation_middleware} from "../middlewares/userValidator";
 import UsersStore from "../models/user";
 import {HttpCodes} from "../utils/constants";
@@ -51,7 +51,7 @@ users_router.get("/", auth_middleware, async (req, res) => {
 });
 
 /**
- * @api {get} /users/:id Request user with id = id
+ * @api {get} /users/:id Get user
  * @apiName GetUserDetails
  * @apiGroup Users
  *
@@ -77,17 +77,20 @@ users_router.get("/", auth_middleware, async (req, res) => {
  * @apiExample {js} Example usage:
  *  fetch("/users/m_atwa")
  */
-users_router.get("/:id", string_id_validation_middleware, auth_middleware, async (req, res) => {
-  const user = await users_store.show(req.params.id);
-  if (!user) {
-    res.status(HttpCodes.not_found).end();
-    return;
+users_router.get("/:id", string_id_params_validation_middleware, auth_middleware, async (req, res) => {
+  const {id} = req.params;
+  if (!res.locals.decoded_token) {
+    throw new Error("Couldn't find decoded_token in res.locals!");
   }
+  const {id: token_id} = res.locals.decoded_token;
+  const user = await users_store.show(id);
+  if (id !== token_id) return res.status(HttpCodes.unauthorized).end();
+  if (!user) return res.status(HttpCodes.not_found).end();
   res.status(HttpCodes.ok).send(user);
 });
 
 /**
- * @api {post} /users Creates a new user
+ * @api {post} /users Create user
  * @apiName CreateUser
  * @apiGroup Users
  *
@@ -125,6 +128,11 @@ users_router.get("/:id", string_id_validation_middleware, auth_middleware, async
  *      }
  *    }
  *
+ * @apiSuccessExample {json} Error-Response:
+ * HTTP/1.1 400 Bad request
+ *    {
+ *      error: "Duplicate User ID"
+ *    }
  * @apiExample {js} Example usage:
  *  fetch("users", {
  *    method: "POST",
@@ -140,13 +148,23 @@ users_router.get("/:id", string_id_validation_middleware, auth_middleware, async
  */
 users_router.post("/", user_validation_middleware, async (req, res) => {
   const {user} = req.body;
-  const created_user = await users_store.create({
-    first_name: user.first_name,
-    last_name: user.last_name,
-    id: user.id,
-    password_hash: await hash_password(user.password),
-  });
-  res.status(HttpCodes.created).send({...created_user});
+  try {
+    const created_user = await users_store.create({
+      first_name: user.first_name,
+      last_name: user.last_name,
+      id: user.id,
+      password_hash: await hash_password(user.password),
+    });
+    res.status(HttpCodes.created).send({...created_user});
+  } catch (error: unknown) {
+    const casted_error = error as Error;
+    if (casted_error.message.includes("unique constraint")) {
+      return res.status(HttpCodes.bad_request).send({
+        error: "Duplicate User ID",
+      });
+    }
+    return res.status(HttpCodes.server_error).send(error);
+  }
 });
 
 export default users_router;
