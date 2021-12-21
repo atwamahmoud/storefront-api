@@ -42,3 +42,31 @@ Please refer to [apidoc.md](./apidoc.md) to check the available endpoints
 ## DB Schema
 
 Please refer to  [db_schema.md](./db_schema.md) to check the db schema
+
+
+## Environment Variables
+### Dev
+
+```
+    PORT=8080
+    POSTGRES_PASSWORD=password
+    POSTGRES_USER=user
+    POSTGRES_DB=storefront_api
+    POSTGRES_PORT=8000
+    POSTGRES_HOST=127.0.0.1
+    SALT_ROUNDS=15
+    PRIVATE_KEY=my_super_secret_private_key
+```
+
+### Dev
+
+```
+    PORT=8080
+    POSTGRES_PASSWORD=password
+    POSTGRES_USER=test_user
+    POSTGRES_DB=storefront_api_test
+    POSTGRES_PORT=8000
+    POSTGRES_HOST=127.0.0.1
+    SALT_ROUNDS=15
+    PRIVATE_KEY=my_super_secret_test_private_key
+```
