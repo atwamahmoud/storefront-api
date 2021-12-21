@@ -58,7 +58,7 @@ Please refer to  [db_schema.md](./db_schema.md) to check the db schema
     PRIVATE_KEY=my_super_secret_private_key
 ```
 
-### Dev
+### Test
 
 ```
     PORT=8080
